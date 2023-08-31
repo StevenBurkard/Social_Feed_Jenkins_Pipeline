@@ -17,7 +17,7 @@ function App() {
   return (
     <div>
       <Navigation />
-      <div className='grid-rules-app' style={{'background-color': '#e2f2ee'}}>
+      <div className='grid-rules-app' style={{'background-color': '#6096BA'}}>
         <CreatePost addNewPost={addNewPost} />
         <DisplayPosts posts={posts} />
       </div>
