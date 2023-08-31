@@ -46,5 +46,20 @@ pipeline {
                 sh "docker push stevenburkard/social-feed-jenkins-pipeline:$BUILD_NUMBER"
             }
         }
+
+        stage('Deploy New Image to AWS EC2'){
+            steps{
+                sh 'echo "Deploying to EC2 instance..."'
+
+                sshagent(['music-library-linux-kp-ssh-credentials']) {
+                    sh """
+                        SSH_COMMAND="ssh -o StrictHostKeyChecking=no ubuntu@18.218.11.221"
+                        \$SSH_COMMAND "docker stop hosted-react-app && docker rm hosted-react-app"
+                        \$SSH_COMMAND "docker pull stevenburkard/social-feed-jenkins-pipeline:$BUILD_NUMBER"
+                        \$SSH_COMMAND "docker run -d -p 80:80 --name hosted-react-app stevenburkard/social-feed-jenkins-pipeline:$BUILD_NUMBER"
+                    """
+                }
+            }
+        }
     }
 }
